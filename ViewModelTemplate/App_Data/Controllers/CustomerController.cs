@@ -26,6 +26,14 @@ namespace ViewModelTemplate.Controllers
 
             return View(customerOrders);
         }
+         public ActionResult Partial(string OrdNo)
+        {
+            DBRepository dbr = new DBRepository();
+
+            List<OrderDetail> details = dbr.getOrderDetails(OrdNo);
+
+            return PartialView("details", details);
+        }
 
     }
 }

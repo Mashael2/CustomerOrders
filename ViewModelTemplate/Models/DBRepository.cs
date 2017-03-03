@@ -25,6 +25,30 @@ namespace ViewModelTemplate.Models
             return customers;
         }
 
+        public List<OrderDetail> getOrderDetails(string ordNo)
+        {
+            OrderEntryDbContext db = new OrderEntryDbContext();
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            List<SqlParameter> sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter("@OrdNo", ordNo));
+            //query for customer orders
+            string sql =
+                "SELECT ot.OrdNo, ol.ProdNo, p.ProdName, p.ProdPrice, ol.Qty " +
+                "FROM OrderTbl ot INNER JOIN OrdLine ol " +
+                " ON ot.OrdNo = ol.OrdNo " +
+                " INNER JOIN Product p " +
+                " ON ol.ProdNo = p.ProdNo " +
+                "WHERE l.OrdNo = @OrdNo;";
+            try
+            {
+                orderDetails = db.orderDetails.SqlQuery(sql,sqlParams.ToArray()).ToList();
+            } catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+
+            return orderDetails;
+
+        }
+
         /***** Use EF to get the customer orders *****/
         public CustomerOrders getCustomerOrdersEF(string custNo)
         {
@@ -71,12 +95,16 @@ namespace ViewModelTemplate.Models
         {
             this.customer = new Customer();
             this.orders = new List<OrderTbl>();
+            this.products = new List<Product>();
+            this.orderLines = new List<OrdLine>();
         }
 
         [Key]
         public string custNo { get; set; }
         public Customer customer { get; set; }
         public List<OrderTbl> orders { get; set; }
+        public List<Product> products { get; set; }
+        public List<OrdLine> orderLines { get; set; }
     }
 
 }

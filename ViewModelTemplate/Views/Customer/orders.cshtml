@@ -1,4 +1,11 @@
 ﻿@model ViewModelTemplate.Models.CustomerOrders
+  
+        <script type="text/javascript">
+            $("#partview").load("/Customer/orderDetails", { ordNo: OrdNo });
+
+        </script>
+        
+
 
 @{
     ViewBag.Title = "orders";
@@ -39,9 +46,13 @@
                     <td>
                         @Html.DisplayFor(Modelitem => item.OrdName)
                     </td>
+                    <td>
+                        @Html.ActionLink("Details","details", new { custid = item.CustNo, Ordid=item.OrdNo})
+                    </td>
                 </tr>
             }
         </table>
+       
     </div>
     
 </div>
